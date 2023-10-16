@@ -55,7 +55,7 @@ public class RestaurantQueryController {
 	}
 	
 	@Operation(summary = "Register customer.")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Registration succesfull."),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Registration successfull."),
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@PostMapping(value = "/register")
