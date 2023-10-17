@@ -38,5 +38,6 @@ public class GlobalExceptionHandler {
 				System.currentTimeMillis());
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
+
 }
 

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.fse.restaurantapi.query.CustomerRequest;
 
-@FeignClient(name = "CUSTOMER-REGISTRATION-API")
+@FeignClient(name = "CUSTOMER-AUTH-API")
 public interface UserRegistrationService {
 
 	@PostMapping(value = "/api/customers/register")

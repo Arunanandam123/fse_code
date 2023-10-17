@@ -55,7 +55,7 @@ public class CommandHandler {
 
 		List<RestaurantEntity> restaurantEntityList = restaurantRepository
 				.findByName(menuUpdateCommand.getRestaurantName());
-		if (restaurantEntityList == null || (restaurantEntityList != null && restaurantEntityList.isEmpty())) {
+		if (restaurantEntityList == null || restaurantEntityList.isEmpty()) {
 			throw new RestaurantNotFoundException("INVALID-RESTAURANT-NAME", "Invalid restaurant name.");
 		}
 

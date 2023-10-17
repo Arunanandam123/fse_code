@@ -1,13 +1,26 @@
 server:
-  port: 8085
+  port: 8088
 spring:
   cloud:
     gateway:
       routes:
-        - id: restaurant_module
+        - id: customer-registration-module
+          uri: 'http://localhost:8082/'
+          predicates:
+            - Path=/customer/api/** 
+        - id: restaurant-api
           uri: 'http://localhost:8081/'
           predicates:
-            - Path=/**         
+            - Path=/food/api/**              
+  application:
+    name: gateway-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
-              
-              
+management:
+  endpoints:
+    web: 
+      exposure:
+        include: gateway
