@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ public class RestaurantCommandController {
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@PostMapping(value = "/admin/add-restaurant", consumes = { "application/json" })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> addRestaurant(@Valid @RequestBody RestaurantCreateCommand restaurantCreateCommand) {
 		restaurantService.createRestaurant(restaurantCreateCommand);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Request to create a new restaurant acccepted.");
@@ -47,6 +49,7 @@ public class RestaurantCommandController {
 			@ApiResponse(responseCode = "404", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error")})
 	@PutMapping(value = "/admin/update-price/menu/{restaurantName}", consumes = { "application/json" })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> updateMenu( @PathVariable String restaurantName,
             @RequestBody List<MenuCreateCommand> newMenu) {
 		restaurantService.updateMenu(restaurantName,newMenu);
