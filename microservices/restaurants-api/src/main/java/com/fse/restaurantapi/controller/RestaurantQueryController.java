@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fse.restaurantapi.query.CustomerRequest;
+import com.fse.restaurantapi.query.LoginRequest;
 import com.fse.restaurantapi.service.RestaurantService;
 import com.fse.restaurantapi.service.UserRegistrationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("food/api/v1/user")
@@ -43,7 +45,8 @@ public class RestaurantQueryController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Returns search result"),
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error") })
-	@GetMapping(value = "/{criteria}/{criteriaValue}")
+	@SecurityRequirement(name = "Bearer Authentication")
+	@GetMapping(value = "/search/{criteria}/{criteriaValue}")
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<List<?>> search(@PathVariable String criteria, @PathVariable String criteriaValue) {
 		if ("restaurant".equalsIgnoreCase(criteria)) {
@@ -64,6 +67,16 @@ public class RestaurantQueryController {
 	public ResponseEntity<?> registerCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
 		userRegistrationService.registerUser(customerRequest);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Created user.");
+	}
+	
+	@Operation(summary = "Customer Login.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Login successfull."),
+			@ApiResponse(responseCode = "400", description = "Bad request"),
+			@ApiResponse(responseCode = "500", description = "Server Error") })
+	@PostMapping(value = "/login")
+	public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
+		String token = userRegistrationService.loginUser(loginRequest);
+		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
 
 }

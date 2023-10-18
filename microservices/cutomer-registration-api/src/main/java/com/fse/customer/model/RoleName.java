@@ -1,7 +1,7 @@
 package com.fse.customer.model;
 
 public enum RoleName {
-    ROLE_USER,     // A regular user role
-    ROLE_ADMIN,    // An admin role
-    ROLE_MODERATOR // A moderator role (you can define other roles as needed)
+    ROLE_USER,     
+    ROLE_ADMIN,    
+    ROLE_MODERATOR 
 }

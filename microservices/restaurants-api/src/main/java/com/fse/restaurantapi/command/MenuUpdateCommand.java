@@ -13,7 +13,6 @@ public class MenuUpdateCommand {
 	
 	public MenuUpdateCommand() {
 		super();
-		// TODO Auto-generated constructor stub
 	}	
 
 	public String getRestaurantName() {

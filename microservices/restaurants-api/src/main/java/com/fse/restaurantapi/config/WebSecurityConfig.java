@@ -14,17 +14,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig {
 
-//	@Override
-//	protected void configure(HttpSecurity http) throws Exception {
-//		http.csrf().disable()
-//			.addFilterAfter(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-//			.authorizeRequests()
-//			.anyRequest().authenticated();
-//	}
-
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((authz) -> authz.antMatchers("/swagger-ui/index.html").permitAll().antMatchers("/food/api/**").authenticated()).csrf(AbstractHttpConfigurer::disable)
+		http.authorizeHttpRequests((authz) -> 
+		   authz.antMatchers("/swagger-ui/index.html").permitAll()		   		 
+				.antMatchers("/food/api/v1/admin/**").authenticated()
+				.antMatchers("/food/api/v1/user/search/**").authenticated()
+				.antMatchers("/food/api/v1/user/register").permitAll()).csrf(AbstractHttpConfigurer::disable)
 				.addFilterAfter(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

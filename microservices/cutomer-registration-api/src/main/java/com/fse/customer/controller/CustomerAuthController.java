@@ -3,6 +3,8 @@ package com.fse.customer.controller;
 import javax.validation.Valid;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +26,9 @@ import com.fse.customer.validator.ValidatorUtil;
 
 @RestController
 @RequestMapping("/api/customers")
-public class CustomerController {
+public class CustomerAuthController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CustomerAuthController.class);
 	@Autowired
 	private CustomerService customerService;
 
@@ -39,6 +43,7 @@ public class CustomerController {
 
 	@PostMapping(value = "/register", consumes = { "application/json" })
 	public ResponseEntity<?> registerCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+		logger.info("Request to register an user.");
 		if (!ValidatorUtil.isValidPhoneNumber(customerRequest.getPhoneNumber())) {
 			throw new CustomConstraintException("INVALID-Phone-Number", "Invalid phone number");
 		}
@@ -46,8 +51,9 @@ public class CustomerController {
 		return ResponseEntity.ok("Registration successful.");
 	}
 
-	@PostMapping("/login")
+	@PostMapping(value = "/login", consumes = { "application/json" })
 	public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+		logger.info("Login request initiated.");
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
