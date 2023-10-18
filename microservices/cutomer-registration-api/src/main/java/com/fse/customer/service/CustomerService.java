@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import com.fse.customer.repository.RoleRepository;
 
 @Service
 public class CustomerService {
+	private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
     @Autowired
     private CustomerRepository customerRepository;
   
@@ -26,12 +29,11 @@ public class CustomerService {
     private RoleRepository roleRepository;
         
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;  
     
-    
-
     public Customer registerCustomer(@Valid CustomerRequest customerRequest) {
     	if (customerRepository.findByEmail(customerRequest.getEmail()).isPresent()) {
+    		logger.debug("Email id {} exisits already.",customerRequest.getEmail());
     		throw new CustomConstraintException("EMAIL-ID-EXISTS", "Email already registered");
         }
     	Customer customer = new Customer();
@@ -44,7 +46,7 @@ public class CustomerService {
         customer.setPassword(hashedPassword);
         for (RoleName roleName : customerRequest.getRoleNames()) {
             Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new CustomConstraintException("NOT-FOUND-ROLE", "Invalid Role provided"));
+                    .orElseThrow(() -> new CustomConstraintException("ROLE-NOT-FOUND", "Invalid Role provided"));
             customerRoles.add(role);
         }
 

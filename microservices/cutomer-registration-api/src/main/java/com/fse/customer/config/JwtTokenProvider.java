@@ -3,6 +3,7 @@ package com.fse.customer.config;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -12,14 +13,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
-	
-	private String secretKey = "secret-key"; // Replace with your actual secret key
-	//private long validityInMilliseconds = 3600000; // 1 hour
 
+	@Value("${auth.secret.key}")
+	private String secretKey;
+	
 	public String createToken(UserDetails userDetails) {
-		Date now = new Date();
-		//Date validity = new Date(now.getTime() + validityInMilliseconds);
-		
+		Date now = new Date();		
 		
 		return Jwts.builder()
 				.setSubject(userDetails.getUsername())

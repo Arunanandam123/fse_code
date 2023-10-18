@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class RestaurantCreateCommand {
 	@NotBlank(message = "Restaurant name is required")
 	private String name;
@@ -25,10 +27,10 @@ public class RestaurantCreateCommand {
     @Size(min = 1, message = "Menu must have at least one item")
 	private List<MenuCreateCommand> menu;
 	
+	@Schema(hidden = true)
 	private String type;
 
-	public RestaurantCreateCommand() {
-		// Default constructor
+	public RestaurantCreateCommand() {		
 	}
 
 	public RestaurantCreateCommand(String name, String address, int ratings, List<MenuCreateCommand> menu) {

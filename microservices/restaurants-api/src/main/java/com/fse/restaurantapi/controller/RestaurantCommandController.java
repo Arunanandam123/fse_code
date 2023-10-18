@@ -23,6 +23,7 @@ import com.fse.restaurantapi.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("food/api/v1")
@@ -37,6 +38,7 @@ public class RestaurantCommandController {
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@PostMapping(value = "/admin/add-restaurant", consumes = { "application/json" })
+	@SecurityRequirement(name = "Bearer Authentication")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> addRestaurant(@Valid @RequestBody RestaurantCreateCommand restaurantCreateCommand) {
 		restaurantService.createRestaurant(restaurantCreateCommand);
@@ -49,6 +51,7 @@ public class RestaurantCommandController {
 			@ApiResponse(responseCode = "404", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error")})
 	@PutMapping(value = "/admin/update-price/menu/{restaurantName}", consumes = { "application/json" })
+	@SecurityRequirement(name = "Bearer Authentication")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> updateMenu( @PathVariable String restaurantName,
             @RequestBody List<MenuCreateCommand> newMenu) {
