@@ -39,10 +39,8 @@ public class RestaurantServiceTests {
     RestaurantService restaurantService = new RestaurantService();
     
     @BeforeEach
-    public void setUp() throws Exception {
-        // Initialize mocks created above
-        MockitoAnnotations.openMocks(this);
-        
+    public void setUp() throws Exception {       
+        MockitoAnnotations.openMocks(this);        
     }
 
     @Test

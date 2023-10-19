@@ -54,7 +54,6 @@ public class CustomerAuthControllerTest {
 
 	@BeforeEach
 	public void setup() {
-		// Init MockMvc Object and build
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
@@ -77,7 +76,7 @@ public class CustomerAuthControllerTest {
 		customerRequest.setName("Test");
 		customerRequest.setEmail("Test@example.com");
 		customerRequest.setPassword("password");
-		customerRequest.setPhoneNumber("invalidPhoneNumber");
+		customerRequest.setPhoneNumber("fdfdsfdsf");
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/customers/register").content(asJsonString(customerRequest))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isBadRequest());

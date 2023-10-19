@@ -30,17 +30,14 @@ class RestaurantQueryEventMapperTest {
 
 	@Test
 	void testToDTO() {
-		// Mock data
+
 		RestaurantEntity restaurantEntity = new RestaurantEntity();
 		RestaurantQueryEvent restaurantQueryEvent = new RestaurantQueryEvent();
 
-		// Mock the modelMapper behavior
 		Mockito.when(modelMapper.map(restaurantEntity, RestaurantQueryEvent.class)).thenReturn(restaurantQueryEvent);
 
-		// Perform the test
 		RestaurantQueryEvent result = restaurantQueryEventMapper.toDTO(restaurantEntity);
 
-		// Verify the behavior
 		assertEquals(restaurantQueryEvent, result);
 	}
 
@@ -50,13 +47,10 @@ class RestaurantQueryEventMapperTest {
 		RestaurantQueryEvent restaurantQueryEvent = new RestaurantQueryEvent();
 		RestaurantEntity restaurantEntity = new RestaurantEntity();
 
-		// Mock the modelMapper behavior
 		Mockito.when(modelMapper.map(restaurantQueryEvent, RestaurantEntity.class)).thenReturn(restaurantEntity);
 
-		// Perform the test
 		RestaurantEntity result = restaurantQueryEventMapper.toEntity(restaurantQueryEvent);
 
-		// Verify the behavior
 		assertEquals(restaurantEntity, result);
 	}
 }

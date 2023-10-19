@@ -15,7 +15,6 @@ public class CustomerRepositoryTests {
 
     @Test
     public void testSaveUser() {
-        // Create a user and save it to the database
     	Customer user = new Customer();
     	user.setName("name");
     	user.setPassword("password");
@@ -24,8 +23,6 @@ public class CustomerRepositoryTests {
 
         
         Customer savedUser = customerRepository.findByName("name");
-
-        // Assert that the saved user is not null and has the expected properties
         assertNotNull(savedUser);
     }
 }

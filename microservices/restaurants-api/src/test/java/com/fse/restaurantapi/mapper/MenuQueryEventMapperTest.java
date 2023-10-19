@@ -16,47 +16,40 @@ import com.fse.restaurantapi.query.MenuQueryEvent;
 class MenuQueryEventMapperTest {
 
 	@InjectMocks
-    @Autowired
-    private MenuQueryEventMapper menuQueryEventMapper = new MenuQueryEventMapper();
+	@Autowired
+	private MenuQueryEventMapper menuQueryEventMapper = new MenuQueryEventMapper();
 
-    @Mock
-    private ModelMapper modelMapper;
+	@Mock
+	private ModelMapper modelMapper;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testToDTO() {
-        // Mock data
-        MenuEntity menuEntity = new MenuEntity();
-        MenuQueryEvent menuQueryEvent = new MenuQueryEvent();
+	@Test
+	void testToDTO() {
 
-        // Mock the modelMapper behavior
-        Mockito.when(modelMapper.map(menuEntity, MenuQueryEvent.class)).thenReturn(menuQueryEvent);
+		MenuEntity menuEntity = new MenuEntity();
+		MenuQueryEvent menuQueryEvent = new MenuQueryEvent();
 
-        // Perform the test
-        MenuQueryEvent result = menuQueryEventMapper.toDTO(menuEntity);
+		Mockito.when(modelMapper.map(menuEntity, MenuQueryEvent.class)).thenReturn(menuQueryEvent);
 
-        // Verify the behavior
-        assertEquals(menuQueryEvent, result);
-    }
+		MenuQueryEvent result = menuQueryEventMapper.toDTO(menuEntity);
 
-    @Test
-    void testToEntity() {
-        // Mock data
-        MenuQueryEvent menuQueryEvent = new MenuQueryEvent();
-        MenuEntity menuEntity = new MenuEntity();
+		assertEquals(menuQueryEvent, result);
+	}
 
-        // Mock the modelMapper behavior
-        Mockito.when(modelMapper.map(menuQueryEvent, MenuEntity.class)).thenReturn(menuEntity);
+	@Test
+	void testToEntity() {
 
-        // Perform the test
-        MenuEntity result = menuQueryEventMapper.toEntity(menuQueryEvent);
+		MenuQueryEvent menuQueryEvent = new MenuQueryEvent();
+		MenuEntity menuEntity = new MenuEntity();
 
-        // Verify the behavior
-        assertEquals(menuEntity, result);
-    }
+		Mockito.when(modelMapper.map(menuQueryEvent, MenuEntity.class)).thenReturn(menuEntity);
+
+		MenuEntity result = menuQueryEventMapper.toEntity(menuQueryEvent);
+
+		assertEquals(menuEntity, result);
+	}
 }
-

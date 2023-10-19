@@ -11,88 +11,80 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EventSerializerConfigTest {
 
-    private EventSerializerConfig eventSerializerConfig;
+	private EventSerializerConfig eventSerializerConfig;
 
-    @Mock
-    private ObjectMapper objectMapper;
+	@Mock
+	private ObjectMapper objectMapper;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        eventSerializerConfig = new EventSerializerConfig(objectMapper);
-    }
+	@BeforeEach
+	public void setUp() {
+		MockitoAnnotations.openMocks(this);
+		eventSerializerConfig = new EventSerializerConfig(objectMapper);
+	}
 
-    @Test
-    public void testSerializeEvent() throws JsonProcessingException {
-        // Define a sample object to be serialized
-        SampleEvent sampleEvent = new SampleEvent("SampleData");
+	@Test
+	public void testSerializeEvent() throws JsonProcessingException {
 
-        Mockito.when(objectMapper.writeValueAsString(sampleEvent)).thenReturn("SerializedData");
+		SampleEvent sampleEvent = new SampleEvent("SampleData");
 
-        String serialized = eventSerializerConfig.serializeEvent(sampleEvent);
+		Mockito.when(objectMapper.writeValueAsString(sampleEvent)).thenReturn("SerializedData");
 
-        assertEquals("SerializedData", serialized);
-    }
+		String serialized = eventSerializerConfig.serializeEvent(sampleEvent);
 
-    @Test
-    public void testSerializeEvent_WithException() throws JsonProcessingException {
-        // Define a sample object to be serialized
-        SampleEvent sampleEvent = new SampleEvent("SampleData");
+		assertEquals("SerializedData", serialized);
+	}
 
-        // Mock the objectMapper behavior to throw an exception
-        Mockito.when(objectMapper.writeValueAsString(sampleEvent)).thenThrow(JsonProcessingException.class);
+	@Test
+	public void testSerializeEvent_WithException() throws JsonProcessingException {
 
-        assertThrows(RuntimeException.class, () -> eventSerializerConfig.serializeEvent(sampleEvent));
-    }
+		SampleEvent sampleEvent = new SampleEvent("SampleData");
 
-    @Test
-    public void testDeserializeEvent() throws JsonProcessingException {
-        // Define a sample JSON to be deserialized
-        String eventJson = "{\"data\":\"SampleData\"}";
+		Mockito.when(objectMapper.writeValueAsString(sampleEvent)).thenThrow(JsonProcessingException.class);
 
-        // Define the expected class type
-        Class<SampleEvent> eventType = SampleEvent.class;
+		assertThrows(RuntimeException.class, () -> eventSerializerConfig.serializeEvent(sampleEvent));
+	}
 
-        // Define the expected deserialized object
-        SampleEvent expectedEvent = new SampleEvent("SampleData");
+	@Test
+	public void testDeserializeEvent() throws JsonProcessingException {
+		
+		String eventJson = "{\"data\":\"SampleData\"}";
 
-        // Mock the objectMapper behavior
-        Mockito.when(objectMapper.readValue(eventJson, eventType)).thenReturn(expectedEvent);
+		Class<SampleEvent> eventType = SampleEvent.class;
 
-        SampleEvent deserialized = eventSerializerConfig.deserializeEvent(eventJson, eventType);
+		SampleEvent expectedEvent = new SampleEvent("SampleData");
 
-        assertEquals(expectedEvent, deserialized);
-    }
+		Mockito.when(objectMapper.readValue(eventJson, eventType)).thenReturn(expectedEvent);
 
-    @Test
-    public void testDeserializeEvent_WithException() throws JsonProcessingException {
-        // Define a sample JSON to be deserialized
-        String eventJson = "{\"data\":\"SampleData\"}";
+		SampleEvent deserialized = eventSerializerConfig.deserializeEvent(eventJson, eventType);
 
-        // Define the expected class type
-        Class<SampleEvent> eventType = SampleEvent.class;
+		assertEquals(expectedEvent, deserialized);
+	}
 
-        // Mock the objectMapper behavior to throw an exception
-        Mockito.when(objectMapper.readValue(eventJson, eventType)).thenThrow(JsonProcessingException.class);
+	@Test
+	public void testDeserializeEvent_WithException() throws JsonProcessingException {
 
-        assertThrows(RuntimeException.class, () -> eventSerializerConfig.deserializeEvent(eventJson, eventType));
-    }
+		String eventJson = "{\"data\":\"SampleData\"}";
 
-    // Define a sample class for testing
-    static class SampleEvent {
-        private String data;
+		Class<SampleEvent> eventType = SampleEvent.class;
 
-        public SampleEvent(String data) {
-            this.data = data;
-        }
+		Mockito.when(objectMapper.readValue(eventJson, eventType)).thenThrow(JsonProcessingException.class);
 
-        public String getData() {
-            return data;
-        }
+		assertThrows(RuntimeException.class, () -> eventSerializerConfig.deserializeEvent(eventJson, eventType));
+	}
 
-        public void setData(String data) {
-            this.data = data;
-        }
-    }
+	static class SampleEvent {
+		private String data;
+
+		public SampleEvent(String data) {
+			this.data = data;
+		}
+
+		public String getData() {
+			return data;
+		}
+
+		public void setData(String data) {
+			this.data = data;
+		}
+	}
 }
-

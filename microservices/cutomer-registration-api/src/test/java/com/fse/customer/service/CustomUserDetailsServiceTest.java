@@ -43,7 +43,7 @@ public class CustomUserDetailsServiceTest {
     private Customer createUser(String username) {
         Customer customer = new Customer();
         customer.setName(username);
-        customer.setPassword("password"); // Set a password
+        customer.setPassword("password"); 
         Role role = new Role();
         role.setName(RoleName.ROLE_USER);
         customer.setRoles(Collections.singleton(role));

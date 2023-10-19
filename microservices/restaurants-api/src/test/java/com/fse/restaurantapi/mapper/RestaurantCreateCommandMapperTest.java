@@ -20,47 +20,41 @@ class RestaurantCreateCommandMapperTest {
 
 	@InjectMocks
 	@Autowired
-    private RestaurantCreateCommandMapper restaurantCreateCommandMapper = new RestaurantCreateCommandMapper();
+	private RestaurantCreateCommandMapper restaurantCreateCommandMapper = new RestaurantCreateCommandMapper();
 
-    @Mock
-    private ModelMapper modelMapper;
+	@Mock
+	private ModelMapper modelMapper;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testToDTO() {
-        // Mock data
-        RestaurantEntity restaurantEntity = new RestaurantEntity();
-        RestaurantCreateCommand restaurantCreateCommand = new RestaurantCreateCommand();
+	@Test
+	void testToDTO() {
 
-        // Mock the modelMapper behavior
-        Mockito.when(modelMapper.map(restaurantEntity, RestaurantCreateCommand.class)).thenReturn(restaurantCreateCommand);
+		RestaurantEntity restaurantEntity = new RestaurantEntity();
+		RestaurantCreateCommand restaurantCreateCommand = new RestaurantCreateCommand();
 
-        // Perform the test
-        RestaurantCreateCommand result = restaurantCreateCommandMapper.toDTO(restaurantEntity);
+		Mockito.when(modelMapper.map(restaurantEntity, RestaurantCreateCommand.class))
+				.thenReturn(restaurantCreateCommand);
 
-        // Verify the behavior
-        assertEquals(restaurantCreateCommand, result);
-    }
+		RestaurantCreateCommand result = restaurantCreateCommandMapper.toDTO(restaurantEntity);
 
-    @Test
-    void testToEntity() {
-        // Mock data
-        RestaurantCreateCommand restaurantCreateCommand = new RestaurantCreateCommand();
-        restaurantCreateCommand.setMenu(new ArrayList<>());
-        RestaurantEntity restaurantEntity = new RestaurantEntity();
+		assertEquals(restaurantCreateCommand, result);
+	}
 
-        // Mock the modelMapper behavior
-        Mockito.when(modelMapper.map(restaurantCreateCommand, RestaurantEntity.class)).thenReturn(restaurantEntity);
+	@Test
+	void testToEntity() {
 
-        // Perform the test
-        RestaurantEntity result = restaurantCreateCommandMapper.toEntity(restaurantCreateCommand);
+		RestaurantCreateCommand restaurantCreateCommand = new RestaurantCreateCommand();
+		restaurantCreateCommand.setMenu(new ArrayList<>());
+		RestaurantEntity restaurantEntity = new RestaurantEntity();
 
-        // Verify the behavior
-        assertEquals(restaurantEntity, result);
-    }
+		Mockito.when(modelMapper.map(restaurantCreateCommand, RestaurantEntity.class)).thenReturn(restaurantEntity);
+
+		RestaurantEntity result = restaurantCreateCommandMapper.toEntity(restaurantCreateCommand);
+
+		assertEquals(restaurantEntity, result);
+	}
 }
-

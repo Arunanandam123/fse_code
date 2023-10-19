@@ -39,8 +39,7 @@ public class RestaurantCommandControllerTest {
     @Test
     public void testAddRestaurant() {
         RestaurantCreateCommand restaurantCreateCommand = new RestaurantCreateCommand();
-        
-        // Mock the service call
+
         Mockito.doNothing().when(restaurantService).createRestaurant(restaurantCreateCommand);
         
         ResponseEntity<String> response = restaurantCommandController.addRestaurant(restaurantCreateCommand);

@@ -8,7 +8,7 @@ public class CustomConstraintExceptionTest {
 
 	@Test
 	public void testCustomConstraintException() {
-		String exceptionCode = "EX-001";
+		String exceptionCode = "exception-001";
 		String exceptionMessage = "Test Message";
 		CustomConstraintException exception = new CustomConstraintException(exceptionCode, exceptionMessage);
 
@@ -18,7 +18,7 @@ public class CustomConstraintExceptionTest {
 
 	@Test
 	public void testToString() {
-		String exceptionCode = "EX-002";
+		String exceptionCode = "exception-002";
 		String exceptionMessage = "Exception Message";
 		CustomConstraintException exception = new CustomConstraintException(exceptionCode, exceptionMessage);
 

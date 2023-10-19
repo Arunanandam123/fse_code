@@ -83,7 +83,6 @@ public class RestaurantQueryControllerTest {
 	public void testRegisterCustomer() {
 		CustomerRequest customerRequest = new CustomerRequest();
 
-		// Mock the service call
 		Mockito.doNothing().when(userRegistrationService).registerUser(customerRequest);
 
 		ResponseEntity<?> response = restaurantQueryController.registerCustomer(customerRequest);
