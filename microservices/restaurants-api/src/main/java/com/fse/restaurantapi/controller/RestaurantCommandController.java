@@ -42,7 +42,7 @@ public class RestaurantCommandController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> addRestaurant(@Valid @RequestBody RestaurantCreateCommand restaurantCreateCommand) {
 		restaurantService.createRestaurant(restaurantCreateCommand);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Request to create a new restaurant acccepted.");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Request to create a new restaurant accepted.");
 	}
 	
 	@Operation(summary = "Update menu/price for a given restaurant.")

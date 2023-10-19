@@ -51,7 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		}
 	}
 
-	private Claims validateToken(HttpServletRequest request) {
+	Claims validateToken(HttpServletRequest request) {
 		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
 		return Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(jwtToken).getBody();
 	}
