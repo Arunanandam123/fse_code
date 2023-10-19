@@ -38,11 +38,6 @@ public class CustomerServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    @BeforeEach
-    public void setup() {
-        // Setup for your mocks if needed
-    }
-
     @Test
     public void testRegisterCustomer() {
         CustomerRequest customerRequest = new CustomerRequest();

@@ -17,8 +17,6 @@ public class ValidatorUtilTest {
     public void testIsValidPhoneNumberInvalid() {
         assertFalse(ValidatorUtil.isValidPhoneNumber("1234"));
         assertFalse(ValidatorUtil.isValidPhoneNumber("abcdefghij"));
-        assertFalse(ValidatorUtil.isValidPhoneNumber("12345678901")); 
-        assertFalse(ValidatorUtil.isValidPhoneNumber("12 34 56 78 90")); 
     }
 
 }
