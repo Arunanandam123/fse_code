@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.fse.restaurantapi.query.AuthResponse;
 import com.fse.restaurantapi.query.CustomerRequest;
 import com.fse.restaurantapi.query.LoginRequest;
 
@@ -15,6 +16,6 @@ public interface UserRegistrationService {
 	public void registerUser(CustomerRequest customerRequest);
 
 	@PostMapping(value = "/api/customers/login")
-	public String loginUser(@Valid LoginRequest loginRequest);
+	public AuthResponse loginUser(@Valid LoginRequest loginRequest);
 
 }

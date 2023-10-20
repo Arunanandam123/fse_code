@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fse.customer.config.JwtTokenProvider;
 import com.fse.customer.exception.CustomConstraintException;
+import com.fse.customer.model.AuthResponse;
 import com.fse.customer.model.CustomerRequest;
 import com.fse.customer.model.LoginRequest;
 import com.fse.customer.service.CustomUserDetailsService;
@@ -52,7 +53,8 @@ public class CustomerAuthController {
 	}
 
 	@PostMapping(value = "/login", consumes = { "application/json" })
-	public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+		System.err.println("HERE");
 		logger.info("Login request initiated.");
 		try {
 			authenticationManager.authenticate(
@@ -60,7 +62,9 @@ public class CustomerAuthController {
 
 			UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getUsername());
 			String token = jwtTokenProvider.createToken(userDetails);
-			return ResponseEntity.ok(token);
+			AuthResponse authResponse = new AuthResponse();
+			authResponse.setToken(token);
+			return ResponseEntity.ok(authResponse);
 		} catch (AuthenticationException e) {
 			return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
 		}

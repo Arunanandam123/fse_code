@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fse.restaurantapi.query.AuthResponse;
 import com.fse.restaurantapi.query.CustomerRequest;
 import com.fse.restaurantapi.query.LoginRequest;
 import com.fse.restaurantapi.service.RestaurantService;
@@ -33,7 +34,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RequestMapping("food/api/v1/user")
 @Validated
 @ConditionalOnProperty(name = "app.write.enabled", havingValue = "false")
-@CrossOrigin(origins = "*")
+@CrossOrigin("http://localhost:4200")
 public class RestaurantQueryController {
 
 	@Autowired
@@ -50,10 +51,13 @@ public class RestaurantQueryController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@GetMapping(value = "/search/{criteria}/{criteriaValue}")
 	@PreAuthorize("hasRole('ROLE_USER')")
+	@CrossOrigin(allowedHeaders = {"Authorization", "Origin"})
 	public ResponseEntity<List<?>> search(@PathVariable String criteria, @PathVariable String criteriaValue) {
+		
 		if ("restaurant".equalsIgnoreCase(criteria)) {
 			return ResponseEntity.status(HttpStatus.OK).body(restaurantService.queryRestaurantsByName(criteriaValue));
 		} else if ("menu".equalsIgnoreCase(criteria)) {
+			
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(restaurantService.queryRestaurantsByMenusName(criteriaValue));
 		} else {
@@ -76,9 +80,9 @@ public class RestaurantQueryController {
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@PostMapping(value = "/login")
-	public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
-		String token = userRegistrationService.loginUser(loginRequest);
-		return ResponseEntity.status(HttpStatus.OK).body(token);
+	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+		AuthResponse authResponse = userRegistrationService.loginUser(loginRequest);
+		return ResponseEntity.status(HttpStatus.OK).body(authResponse);
 	}
 
 }

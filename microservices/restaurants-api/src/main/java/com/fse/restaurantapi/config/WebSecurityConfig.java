@@ -16,11 +16,11 @@ class WebSecurityConfig {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((authz) -> 
-		   authz.antMatchers("/swagger-ui/index.html").permitAll()		   		 
-				.antMatchers("/food/api/v1/admin/**").authenticated()
-				.antMatchers("/food/api/v1/user/search/**").authenticated()
-				.antMatchers("/food/api/v1/user/register").permitAll()).csrf(AbstractHttpConfigurer::disable)
+		http.csrf().disable().cors().and()
+				.authorizeHttpRequests((authz) -> authz.antMatchers("/swagger-ui/index.html").permitAll()
+						.antMatchers("/food/api/v1/admin/**").authenticated().antMatchers("/food/api/v1/user/search/**")
+						.authenticated().antMatchers("/food/api/v1/user/register").permitAll())
+				.csrf(AbstractHttpConfigurer::disable)
 				.addFilterAfter(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

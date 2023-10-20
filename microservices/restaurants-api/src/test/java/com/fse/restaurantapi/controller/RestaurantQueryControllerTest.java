@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.fse.restaurantapi.query.AuthResponse;
 import com.fse.restaurantapi.query.CustomerRequest;
 import com.fse.restaurantapi.query.LoginRequest;
 import com.fse.restaurantapi.query.RestaurantQueryEvent;
@@ -94,13 +95,14 @@ public class RestaurantQueryControllerTest {
 	@Test
 	public void testLogin() {
 		LoginRequest loginRequest = new LoginRequest();
-		String token = "Bearer Token";
+		AuthResponse authResponse = new AuthResponse();
+		authResponse.setToken("Bearer Token");
+		
+		Mockito.when(userRegistrationService.loginUser(loginRequest)).thenReturn(authResponse);
 
-		Mockito.when(userRegistrationService.loginUser(loginRequest)).thenReturn(token);
-
-		ResponseEntity<String> response = restaurantQueryController.login(loginRequest);
+		ResponseEntity<AuthResponse> response = restaurantQueryController.login(loginRequest);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(token, response.getBody());
+		assertEquals(authResponse, response.getBody());
 	}
 }
