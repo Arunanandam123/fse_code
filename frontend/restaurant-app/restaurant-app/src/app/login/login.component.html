@@ -1,0 +1,24 @@
+<div class="container mt-5">
+    <div class="card bg-light mb-3 mx-auto" style="max-width: 30rem;">
+        <div class="card-header">
+            <h5 class="card-title">Login</h5>
+        </div>
+        <div class="card-body">
+            <form (submit)="login()">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" [(ngModel)]="username" required
+                        placeholder="Enter username" class="form-control mb-3">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" [(ngModel)]="password" required
+                        placeholder="Enter password" class="form-control mb-3">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

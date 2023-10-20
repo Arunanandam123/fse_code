@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  
+  <div class="card bg-light mb-3 mx-auto" style="max-width: 30rem;">
+    <div class="card-header">
+      <h5 class="card-title">Search</h5>
+    </div>
+    <div class="card-body">
+    <form ngNativeValidate (submit)="onSubmit()">
+      <label for="options">Please select an option: </label>
+      <div id="options">
+        <div class="form-check">
+          <input type="radio" name="type" value="Menu" [(ngModel)]="selectedType" id="radio1" />
+          <label class="form-check-label" for="radio1">
+            Menu
+          </label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="type" value="Restaurant" [(ngModel)]="selectedType" id="radio2" />
+          <label class="form-check-label" for="radio2">
+            Restaurant
+          </label>
+        </div>
+
+        <p>Selected search criteria: {{ selectedType }}</p>
+
+        <div class="form-group mx-sm-3 mb-2">
+          <input class="form-control" type="text" [(ngModel)]="searchTerm" name="search" placeholder="Search..." required />
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
+
+
+      </div>
+    </form>
+  </div>
+  </div>
+</div>
+<app-results></app-results>
