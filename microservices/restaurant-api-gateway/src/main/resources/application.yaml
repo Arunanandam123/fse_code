@@ -5,13 +5,17 @@ spring:
     gateway:
       routes:
         - id: customer-registration-module
-          uri: 'http://localhost:8082/'
+          uri: 'http://localhost:8083/'
           predicates:
             - Path=/customer/api/** 
-        - id: restaurant-api
+        - id: restaurant-api-admin
           uri: 'http://localhost:8081/'
           predicates:
-            - Path=/food/api/**              
+            - Path=/food/api/admin/** 
+        - id: restaurant-api-user
+          uri: 'http://localhost:8082/'
+          predicates:
+            - Path=/food/api/user/**              
   application:
     name: gateway-service
 eureka:

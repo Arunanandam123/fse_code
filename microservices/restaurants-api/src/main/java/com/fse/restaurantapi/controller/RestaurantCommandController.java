@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +27,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("food/api/v1")
+@RequestMapping("food/api/v1/admin")
+@ConditionalOnProperty(name = "app.write.enabled", havingValue = "true")
 @Validated
 public class RestaurantCommandController {
 	
@@ -37,7 +39,7 @@ public class RestaurantCommandController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "202", description = "Accepted Restauramt add request."),
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error") })
-	@PostMapping(value = "/admin/add-restaurant", consumes = { "application/json" })
+	@PostMapping(value = "/add-restaurant", consumes = { "application/json" })
 	@SecurityRequirement(name = "Bearer Authentication")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> addRestaurant(@Valid @RequestBody RestaurantCreateCommand restaurantCreateCommand) {
@@ -50,7 +52,7 @@ public class RestaurantCommandController {
 			@ApiResponse(responseCode = "400", description = "Bad request"),
 			@ApiResponse(responseCode = "404", description = "Bad request"),
 			@ApiResponse(responseCode = "500", description = "Server Error")})
-	@PutMapping(value = "/admin/update-price/menu/{restaurantName}", consumes = { "application/json" })
+	@PutMapping(value = "/update-price/menu/{restaurantName}", consumes = { "application/json" })
 	@SecurityRequirement(name = "Bearer Authentication")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> updateMenu( @PathVariable String restaurantName,
