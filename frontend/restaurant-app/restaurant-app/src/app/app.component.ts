@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +11,10 @@ export class AppComponent {
   
   title = 'restaurant-app';
 
-  
+  constructor(public authService: AuthService, private router: Router) {}
+
+  onSignOut() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

@@ -19,7 +19,7 @@ class WebSecurityConfig {
 		http.csrf().disable().cors().and()
 				.authorizeHttpRequests((authz) -> authz.antMatchers("/swagger-ui/index.html").permitAll()
 						.antMatchers("/food/api/v1/admin/**").authenticated().antMatchers("/food/api/v1/user/search/**")
-						.authenticated().antMatchers("/food/api/v1/user/register").permitAll())
+						.authenticated().antMatchers("/food/api/v1/user/register").permitAll().antMatchers("/food/api/v1/user/login").permitAll())
 				.csrf(AbstractHttpConfigurer::disable)
 				.addFilterAfter(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();

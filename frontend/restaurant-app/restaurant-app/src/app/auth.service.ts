@@ -25,17 +25,22 @@ export class AuthService {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials);
   }
 
-  setToken(token: string): void {
+  setToken(token: string): void {    
     this.authToken = token;
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 
   clearToken(): void {
     this.authToken = null;
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
   }
+
+  logout() {
+    this.clearToken();
+  }
+
 }
