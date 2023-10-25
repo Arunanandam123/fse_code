@@ -20,7 +20,7 @@ public class JwtTokenProviderTests {
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
 		jwtTokenProvider = new JwtTokenProvider();
-		ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "it's a security key");
+		ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "security key");
 	}
 
 	@Test

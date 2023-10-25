@@ -1,5 +1,7 @@
 package com.fse.restaurant.springbatch.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
@@ -10,6 +12,7 @@ import com.fse.restaurant.springbatch.repository.RestaurantRepository;
 
 @Component
 public class JobCompletionNotificationListener implements JobExecutionListener {
+	private static final Logger logger = LoggerFactory.getLogger(JobCompletionNotificationListener.class);
 
     @Autowired
     private RestaurantRepository restaurantRepository; 
@@ -17,19 +20,19 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
     @Override
     public void beforeJob(JobExecution jobExecution) {
         
-        System.out.println("Job Started...");
+    	logger.info("Job Started...");
     }
 
     @Override
     public void afterJob(JobExecution jobExecution) {
         // This method is called after the batch job completes.
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            System.out.println("Job Completed Successfully!");
+        	logger.info("Job Completed Successfully!");
 
             long recordCount = restaurantRepository.count();
-            System.out.println("Records Inserted: " + recordCount);
+            logger.info("Records Inserted: " + recordCount);
         } else if (jobExecution.getStatus() == BatchStatus.FAILED) {
-            System.err.println("Job Failed...");
+        	logger.error("Job Failed...");
         }
     }
 }

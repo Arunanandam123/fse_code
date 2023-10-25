@@ -53,8 +53,7 @@ public class CustomerAuthController {
 	}
 
 	@PostMapping(value = "/login", consumes = { "application/json" })
-	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-		System.err.println("HERE");
+	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {		
 		logger.info("Login request initiated.");
 		try {
 			authenticationManager.authenticate(

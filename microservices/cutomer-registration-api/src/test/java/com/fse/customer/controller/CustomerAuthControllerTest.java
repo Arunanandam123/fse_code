@@ -94,7 +94,7 @@ public class CustomerAuthControllerTest {
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/customers/login").content(asJsonString(loginRequest))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().string("testToken"));
+				.andExpect(MockMvcResultMatchers.content().string("{\"token\":\"testToken\"}"));
 	}
 
 	@Test
