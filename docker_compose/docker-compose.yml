@@ -1,0 +1,148 @@
+version: '3.3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest    
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - springapidiscovery-net  
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    depends_on:
+    - zookeeper
+    healthcheck:
+      test: nc -z localhost 9093 || exit -1
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181      
+    networks:
+      - springapidiscovery-net
+  restaurant-discovery-backend:
+    image: fse5/restaurant-service-discovery:latest
+    container_name: restaurant-service-discovery-backend
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
+    ports:
+      - "8761:8761"
+    networks:
+      - springapidiscovery-net 
+  mysqldb:
+    container_name: mysqldb
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - springapimysql-net
+    environment:
+      MYSQL_DATABASE: restaurant      
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 30s
+      retries: 10
+    volumes:
+      - my-datavolume:/var/lib/mysql 
+  restaurant-api-gateway-backend:
+    image: fse5/restaurant-api-gateway:latest
+    container_name: restaurant-api-gateway-backend
+    restart: always    
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      restaurant-discovery-backend:
+        condition: service_started
+    links:
+      - restaurant-discovery-backend
+    ports:
+      - "8088:8088"
+    networks:
+      - springapidiscovery-net
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka       
+  customer-auth-api:
+    image: fse5/customer-auth-api:latest
+    container_name: customer-auth-api
+    restart: always
+    ports:
+      - "8083:8083"
+    links:
+      - restaurant-discovery-backend
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      restaurant-discovery-backend:
+        condition: service_started
+    networks:
+      - springapimysql-net
+      - springapidiscovery-net 
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka  
+  restaurant-write-api:
+    image: fse5/restaurant-api:latest
+    container_name: restaurant-write-api
+    restart: always
+    ports:
+      - "8081:8081"
+    links:
+      - restaurant-discovery-backend
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      restaurant-discovery-backend:   
+        condition: service_started
+      kafka:
+        condition: service_healthy
+    networks:
+      - springapimysql-net
+      - springapidiscovery-net 
+    environment:
+      - "SPRING_PROFILES_ACTIVE=write"
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka
+  restaurant-read-api:
+    image: fse5/restaurant-api:latest
+    container_name: restaurant-read-api
+    restart: always
+    ports:
+      - "8082:8082"
+    links:
+      - restaurant-discovery-backend    
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      restaurant-discovery-backend:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+    networks:
+      - springapimysql-net    
+      - springapidiscovery-net 
+    environment:
+      - "SPRING_PROFILES_ACTIVE=read"
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka 
+networks:
+  springapimysql-net:
+  springapidiscovery-net:
+  
+volumes:
+  my-datavolume:
+
+      
+      
+
