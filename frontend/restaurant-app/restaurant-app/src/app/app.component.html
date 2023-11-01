@@ -12,7 +12,7 @@
             <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" *ngIf="authService.isAuthenticated()" (click)="onSignOut()">Sign Out</a>
+            <a class="nav-link sidenav-signout" *ngIf="authService.isAuthenticated()" (click)="onSignOut()">Sign Out</a>
           </li>
         </ul>
       </div>

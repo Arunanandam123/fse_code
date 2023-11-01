@@ -49,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 			return;
 		}
-	}
+}
 
 	Claims validateToken(HttpServletRequest request) {
 		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");

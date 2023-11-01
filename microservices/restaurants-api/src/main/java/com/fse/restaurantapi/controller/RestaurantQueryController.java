@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @CrossOrigin("http://localhost:4200")
 public class RestaurantQueryController {
 
+	private static final Logger logger = LoggerFactory.getLogger(RestaurantQueryController.class);
+
 	@Autowired
 	private RestaurantService restaurantService;
 	
@@ -53,7 +57,7 @@ public class RestaurantQueryController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@CrossOrigin(allowedHeaders = {"Authorization", "Origin"})
 	public ResponseEntity<List<?>> search(@PathVariable String criteria, @PathVariable String criteriaValue) {
-		
+		logger.info("Search requested initaited for {} with value {}",criteria,criteriaValue);
 		if ("restaurant".equalsIgnoreCase(criteria)) {
 			return ResponseEntity.status(HttpStatus.OK).body(restaurantService.queryRestaurantsByName(criteriaValue));
 		} else if ("menu".equalsIgnoreCase(criteria)) {
@@ -71,6 +75,7 @@ public class RestaurantQueryController {
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@PostMapping(value = "/register")
 	public ResponseEntity<?> registerCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+		logger.info("Registering user with user name {}",customerRequest.getName());
 		userRegistrationService.registerUser(customerRequest);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Created user.");
 	}

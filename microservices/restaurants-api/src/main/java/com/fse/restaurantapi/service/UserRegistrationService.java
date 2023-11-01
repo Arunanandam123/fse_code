@@ -9,7 +9,7 @@ import com.fse.restaurantapi.query.AuthResponse;
 import com.fse.restaurantapi.query.CustomerRequest;
 import com.fse.restaurantapi.query.LoginRequest;
 
-@FeignClient(name = "CUSTOMER-AUTH-API")
+@FeignClient(name = "customer-auth-api", url = "http://customer-auth-api:8083")
 public interface UserRegistrationService {
 
 	@PostMapping(value = "/api/customers/register")
