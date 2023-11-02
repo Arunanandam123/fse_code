@@ -41,7 +41,7 @@ public class RestaurantCommandController {
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@PostMapping(value = "/add-restaurant", consumes = { "application/json" })
 	@SecurityRequirement(name = "Bearer Authentication")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> addRestaurant(@Valid @RequestBody RestaurantCreateCommand restaurantCreateCommand) {
 		restaurantService.createRestaurant(restaurantCreateCommand);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Request to create a new restaurant accepted.");

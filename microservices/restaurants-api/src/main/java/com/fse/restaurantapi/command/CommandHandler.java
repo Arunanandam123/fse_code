@@ -1,7 +1,10 @@
 package com.fse.restaurantapi.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -11,12 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.fse.restaurantapi.config.DynamoDBConfig;
 import com.fse.restaurantapi.config.EventSerializerConfig;
 import com.fse.restaurantapi.entity.MenuEntity;
 import com.fse.restaurantapi.entity.RestaurantEntity;
+import com.fse.restaurantapi.entity.RestaurantsMenus;
 import com.fse.restaurantapi.exception.RestaurantNotFoundException;
 import com.fse.restaurantapi.mapper.RestaurantCreateCommandMapper;
 import com.fse.restaurantapi.repository.RestaurantRepository;
+
+
 
 @Service
 public class CommandHandler {
@@ -27,10 +38,16 @@ public class CommandHandler {
 	RestaurantCreateCommandMapper restaurantCreateCommandMapper;
 
 	@Autowired
+	private DynamoDBConfig dynamoDBConfig;
+	
+	@Autowired
 	private RestaurantRepository restaurantRepository;
 
 	@Autowired
 	private EventSerializerConfig eventSerializer;
+	
+	@Autowired
+    private DynamoDBMapper mapper;
 
 	@KafkaListener(topics = "create-restaurant", groupId = "create-restaurant-group")
 	public void handleCreateRestaurantCommand(String command) {
@@ -41,7 +58,20 @@ public class CommandHandler {
 
 		RestaurantEntity restaurantEntity = restaurantCreateCommandMapper.toEntity(restaurantCreateCommand);
 		restaurantRepository.save(restaurantEntity);
-
+		
+		//Save to DynamoDB
+		
+		for(MenuCreateCommand menuCreateCommand: restaurantCreateCommand.getMenu()) {
+			RestaurantsMenus restaurantsMenus = new RestaurantsMenus();
+			restaurantsMenus.setRestaurantName(restaurantCreateCommand.getName());
+			restaurantsMenus.setMenuPrice(menuCreateCommand.getPrice());
+			restaurantsMenus.setMenuItemName(menuCreateCommand.getName());
+			restaurantsMenus.setRestaurantRating(restaurantCreateCommand.getRatings());
+			restaurantsMenus.setRestaurantAddress(restaurantCreateCommand.getAddress());
+			mapper.save(restaurantsMenus);
+		}
+			
+		
 		logger.debug("saved the entity in database.");
 
 	}

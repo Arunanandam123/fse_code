@@ -1,11 +1,18 @@
 package com.fse.restaurantapi.query;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.fse.restaurantapi.config.DynamoDBConfig;
 import com.fse.restaurantapi.entity.MenuEntity;
 import com.fse.restaurantapi.entity.RestaurantEntity;
 import com.fse.restaurantapi.exception.MenuNotFoundException;
@@ -29,9 +36,16 @@ public class QueryHandler {
 
 	@Autowired
 	MenuQueryEventMapper menuQueryEventMapper;
+	
+	@Autowired
+	DynamoDBConfig dynamoDBConfig;
 
-	public List<RestaurantQueryEvent> queryRestaurantsByName(String name) {
+	private String tableName = "RestaurantsMenus";
+	public List<RestaurantQueryEvent> queryRestaurantsByName(String name) {		
+		
 		List<RestaurantEntity> restaurantEntityList = restaurantRepository.findByName(name);
+		QueryResult queryResult = performSearch("RestaurantNameIndex", "RestaurantName", name);
+		
 		if (restaurantEntityList != null && !restaurantEntityList.isEmpty()) {
 			List<RestaurantQueryEvent> restaurantQueryEventList = new ArrayList<>();
 			for (RestaurantEntity restaurantEntity : restaurantEntityList) {
@@ -45,6 +59,9 @@ public class QueryHandler {
 
 	public List<RestaurantQueryEvent> queryRestaurantsByMenusName(String name) {
 		List<MenuEntity> menuEntityList = menuRepository.findByName(name);
+		
+		QueryResult queryResult =performSearch("MenuItemNameIndex", "MenuItemName", name);		
+		
 		List<RestaurantQueryEvent> restaurantQueryEventList = new ArrayList<>();
 		if (menuEntityList != null && !menuEntityList.isEmpty()) {
 			for (MenuEntity menuEntity : menuEntityList) {
@@ -59,6 +76,29 @@ public class QueryHandler {
 			throw new MenuNotFoundException("INVALID-MENU-NAME", "Invalid menu provided.");
 		}
 		return restaurantQueryEventList;
+	}
+
+	private QueryResult performSearch(String indexName, String attributeName, String attributeValue) {
+		
+		Map<String, AttributeValue> attributeValues = new HashMap<>();
+        attributeValues.put(":value", new AttributeValue().withS(attributeValue));
+
+        QueryRequest queryRequest = new QueryRequest()
+            .withTableName(tableName)
+            .withIndexName(indexName)
+            .withKeyConditionExpression("#attr = :value")
+            .withExpressionAttributeNames(Collections.singletonMap("#attr", attributeName))
+            .withExpressionAttributeValues(attributeValues);
+
+        // Execute the query
+        QueryResult queryResponse = dynamoDBConfig.amazonDynamoDB().query(queryRequest);
+
+        // Process the query results
+        queryResponse.getItems().forEach(item -> {            
+            System.out.println(item);
+        });
+        
+        return queryResponse;
 	}
 
 }

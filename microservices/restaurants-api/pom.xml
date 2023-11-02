@@ -118,6 +118,22 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
+		<!--Dependency:-->
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>DynamoDBLocal</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<!-- AWS SDK for Java -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.12.567</version> <!-- Use the latest version available -->
+		</dependency>
+
+
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -147,8 +163,9 @@
 						<exclude>com/fse/restaurantapi/entity/*</exclude>
 						<exclude>com/fse/restaurantapi/exception/*</exclude>
 						<exclude>com/fse/restaurantapi/query/*</exclude>
-						<exclude>com/fse/restaurantapi/command/RestaurantCreateCommand*</exclude>
-							
+						<exclude>
+							com/fse/restaurantapi/command/RestaurantCreateCommand*</exclude>
+
 					</excludes>
 				</configuration>
 				<executions>

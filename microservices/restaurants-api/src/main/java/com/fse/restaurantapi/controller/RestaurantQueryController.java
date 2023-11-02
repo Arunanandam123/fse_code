@@ -54,7 +54,7 @@ public class RestaurantQueryController {
 			@ApiResponse(responseCode = "500", description = "Server Error") })
 	@SecurityRequirement(name = "Bearer Authentication")
 	@GetMapping(value = "/search/{criteria}/{criteriaValue}")
-	@PreAuthorize("hasRole('ROLE_USER')")
+	//@PreAuthorize("hasRole('ROLE_USER')")
 	@CrossOrigin(allowedHeaders = {"Authorization", "Origin"})
 	public ResponseEntity<List<?>> search(@PathVariable String criteria, @PathVariable String criteriaValue) {
 		logger.info("Search requested initaited for {} with value {}",criteria,criteriaValue);

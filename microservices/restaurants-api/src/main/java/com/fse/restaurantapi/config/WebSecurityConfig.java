@@ -18,8 +18,8 @@ class WebSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable().cors().and()
 				.authorizeHttpRequests((authz) -> authz.antMatchers("/swagger-ui/index.html").permitAll()
-						.antMatchers("/food/api/v1/admin/**").authenticated().antMatchers("/food/api/v1/user/search/**")
-						.authenticated().antMatchers("/food/api/v1/user/register").permitAll().antMatchers("/food/api/v1/user/login").permitAll())
+						.antMatchers("/food/api/v1/admin/**").permitAll().antMatchers("/food/api/v1/user/search/**")
+						.permitAll().antMatchers("/food/api/v1/user/register").permitAll().antMatchers("/food/api/v1/user/login").permitAll())
 				.csrf(AbstractHttpConfigurer::disable)
 				.addFilterAfter(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
