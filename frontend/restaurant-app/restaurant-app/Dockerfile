@@ -1,28 +1,8 @@
-# Use an official Node.js runtime as the base image
-FROM node:16
-# Set the working directory in the container
+FROM node:16-alpine
 WORKDIR /app
-
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
-
-# Install Angular CLI globally
-RUN npm install -g @angular/cli
-
-# Install project dependencies
-RUN npm install
-
-# Copy the rest of the application source code to the working directory
+RUN npm install -g @angular/cli@13
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
-
-# Build the Angular application
-RUN ng build --prod
-
-# Expose a port for the application (you can customize this port)
-EXPOSE 80
-
-# Set a custom host for the Angular application
-ENV HOST 0.0.0.0
-
-# Define the command to run your application when the container starts
-CMD ["npm", "start"]
+EXPOSE 4200
+CMD ["ng", "serve", "--host", "0.0.0.0"]

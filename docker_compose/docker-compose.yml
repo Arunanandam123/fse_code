@@ -30,7 +30,7 @@ services:
     networks:
       - springapidiscovery-net
   restaurant-discovery-backend:
-    image: fse5/restaurant-service-discovery:latest
+    image: 1984arun/restaurant-service-discovery:latest
     container_name: restaurant-service-discovery-backend
     restart: always
     healthcheck:
@@ -60,7 +60,7 @@ services:
     volumes:
       - my-datavolume:/var/lib/mysql 
   restaurant-api-gateway-backend:
-    image: fse5/restaurant-api-gateway:latest
+    image: 1984arun/restaurant-api-gateway:latest
     container_name: restaurant-api-gateway-backend
     restart: always    
     depends_on:
@@ -77,7 +77,7 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka       
   customer-auth-api:
-    image: fse5/customer-auth-api:latest
+    image: 1984arun/customer-auth-api:latest
     container_name: customer-auth-api
     restart: always
     ports:
@@ -95,7 +95,7 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka  
   restaurant-write-api:
-    image: fse5/restaurant-api:latest
+    image: 1984arun/restaurant-api:latest
     container_name: restaurant-write-api
     restart: always
     ports:
@@ -116,7 +116,7 @@ services:
       - "SPRING_PROFILES_ACTIVE=write"
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka
   restaurant-read-api:
-    image: fse5/restaurant-api:latest
+    image: 1984arun/restaurant-api:latest
     container_name: restaurant-read-api
     restart: always
     ports:
@@ -136,6 +136,15 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=read"
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://restaurant-discovery-backend:8761/eureka 
+  restaurant-web-app:
+    image: 1984arun/restaurant-web-app:latest
+    container_name: restaurant-web-app
+    restart: always
+    ports:
+      - "4200:4200"   
+    networks:
+      - springapimysql-net    
+      - springapidiscovery-net 
 networks:
   springapimysql-net:
   springapidiscovery-net:
